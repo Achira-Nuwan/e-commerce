@@ -12,9 +12,11 @@ public interface UserService {
 
     User createUser(User user);
 
-    User getUserById(Long id);
+    User getUserByEmail(String email);
 
-    User updateUser(Long id, User user);
+    User updateUser(String email, User user);
 
-    void deleteUserById(Long id); 
+    User updatePassword(String email, String password);
+
+    void deleteUserByEmail(String email);
 }

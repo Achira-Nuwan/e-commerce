@@ -1,13 +1,13 @@
 package com.example.e_commerce.dto;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class OrderRequestDto {
+public class CommentRequestDto {
+    private String comment;
+    private Long productId;
     private String userEmail;
-    private List<OrderProductsDto> orderProducts;
+    private Double rating;
 }

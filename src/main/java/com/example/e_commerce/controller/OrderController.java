@@ -16,9 +16,11 @@ import com.example.e_commerce.dto.OrderProductsDto;
 import com.example.e_commerce.dto.OrderRequestDto;
 import com.example.e_commerce.entities.Orders;
 import com.example.e_commerce.entities.Product;
+import com.example.e_commerce.entities.User;
 import com.example.e_commerce.service.OrderService;
 import com.example.e_commerce.service.ProductService;
 // import com.example.e_commerce.service.email.EmailService;
+import com.example.e_commerce.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -30,6 +32,9 @@ public class OrderController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserService userService;
 
     // @Autowired
     // private EmailService emailService;
@@ -68,41 +73,20 @@ public class OrderController {
                 return ResponseEntity.badRequest().body("Invalid productId:" + productId);
             }
 
-            /*
-             * if (product.getStocks().getQty() < quantity) {
-             * return ResponseEntity.badRequest().body("Insufficient stock for Id:" +
-             * productId);
-             * }
-             */
-
-            // Deduct stock
-            /*
-             * int updatedStock = product.getStocks().getQty() - quantity;
-             * product.getStocks().setQty(updatedStock);
-             */
-
             // Add products to order
             productList.add(product);
             totalPrice += product.getPrice() * quantity;
         }
 
+        User user = userService.getUserByEmail(dto.getUserEmail());
+
         Orders createOrder = new Orders();
 
         createOrder.setOrderProducts(productList);
         createOrder.setTotalPrice(totalPrice);
+        createOrder.setUser(user);
 
         Orders createdOrder = orderService.createOrder(createOrder);
-
-        // // Sending email
-        // String customerEmail = "s17933@sci.pdn.ac.lk";
-        // String companyEmail = "achiranuwan40@gmail.com";
-        // String subject = "Order Confirmation - DHF";
-        // String orderDetails = "Your order has been placed successfully!\n\n" +
-        // dto.toString();
-
-        // emailService.sendMail(customerEmail, subject, orderDetails);
-        // emailService.sendMail(companyEmail, "New Order Received", "A new order has
-        // been placed: \n" + orderDetails);
 
         return ResponseEntity.ok(createdOrder);
     }

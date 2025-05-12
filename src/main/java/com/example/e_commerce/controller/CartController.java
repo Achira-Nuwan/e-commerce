@@ -1,6 +1,7 @@
 package com.example.e_commerce.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,15 +19,15 @@ import com.example.e_commerce.service.CartService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/api/cart")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class CartController {
 
     private final CartService cartService;
 
-    @PostMapping("/add")
-    public ResponseEntity<CartResponseDto> addToCart(@RequestBody CartRequestDto cartRequest) {
+    @PostMapping
+    public ResponseEntity<CartResponseDto> addToCart(@Validated @RequestBody CartRequestDto cartRequest) {
         System.out.println("Received cart data:" + cartRequest);
         return ResponseEntity.ok(cartService.addToCart(cartRequest));
     }
@@ -36,7 +37,7 @@ public class CartController {
         return ResponseEntity.ok(cartService.getCart(userId));
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<CartResponseDto> updateCart(@RequestBody UpdateCartItemDto dto) {
         CartResponseDto updatedCart = cartService.updateCartItem(dto);
         return ResponseEntity.ok(updatedCart);
